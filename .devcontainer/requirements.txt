@@ -1,0 +1,6 @@
+Cython
+jupyter
+matplotlib
+Pillow
+ray
+waymo-open-dataset-tf-2-12-0
