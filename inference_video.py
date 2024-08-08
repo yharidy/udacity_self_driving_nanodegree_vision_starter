@@ -1,5 +1,4 @@
 import argparse
-import time
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -63,8 +62,7 @@ def main(labelmap_path, model_path, tf_record_path, config_path, output_path):
 
         # tensor -> numpy arr, remove one dimensions
         num_detections = int(detections.pop('num_detections'))
-        detections = {key: value[0, ...].numpy()
-                    for key, value in detections.items()}
+        detections = {key: value[0, ...].numpy() for key, value in detections.items()}
         detections['num_detections'] = num_detections
 
         # detection_classes should be ints.
