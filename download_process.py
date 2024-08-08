@@ -2,6 +2,7 @@ import argparse
 import io
 import os
 import subprocess
+import gc
 
 import ray
 import tensorflow.compat.v1 as tf
@@ -139,9 +140,11 @@ def download_and_process(filename, data_dir):
     # remove the original tf record to save space
     logger.info(f'Deleting {local_path}')
     os.remove(local_path)
+    gc.collect()
 
 
 if __name__ == "__main__":
+    os.environ['CUDA_VISIBLE_DEVICES'] = "0"
     logger = get_module_logger(__name__)
     parser = argparse.ArgumentParser(description='Download and process tf files')
     parser.add_argument('--data_dir', required=True,
