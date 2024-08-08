@@ -59,10 +59,13 @@ RUN [[ "${ARCH}" = "ppc64le" ]] || { apt-get update && \
 
 # For CUDA profiling, TensorFlow requires CUPTI.
 ENV LD_LIBRARY_PATH /usr/local/cuda/extras/CUPTI/lib64:/usr/local/cuda/lib64:$LD_LIBRARY_PATH
+ENV PATH=/usr/local/cuda-${CUDA}/bin${PATH:+:${PATH}}
+ENV LD_LIBRARY_PATH=/usr/local/cuda-${CUDA}/lib64:$LD_LIBRARY_PATH
+ENV LD_LIBRARY_PATH=/usr/local/cuda-${CUDA}/include:$LD_LIBRARY_PATH
 
 # Link the libcuda stub to the location where tensorflow is searching for it and reconfigure
-# dynamic linker run-time bindings
-RUN ln -s /usr/local/cuda/lib64/stubs/libcuda.so /usr/local/cuda/lib64/stubs/libcuda.so.1 \
+# dynamic linker run-+time bindings
+RUN ln -s /usr/local/cuda-${CUDA}/compat/libcuda.so /usr/local/cuda/lib64/stubs/libcuda.so.1 \
     && echo "/usr/local/cuda/lib64/stubs" > /etc/ld.so.conf.d/z-cuda-stubs.conf \
     && ldconfig
 
@@ -71,18 +74,32 @@ ENV LANG C.UTF-8
 
 RUN apt update -y && \
     add-apt-repository ppa:deadsnakes/ppa -y && \
-    apt install -y python3.8 python3-pip
+    apt install -y python3.9 python3.9-venv python3.9-dev
 
-RUN ln -s $(which python3) /usr/local/bin/python
+RUN update-alternatives --install /usr/bin/python python /usr/bin/python3.9 1
+RUN python --version
+
+RUN curl -sS https://bootstrap.pypa.io/get-pip.py | python3.9
 
 RUN python -m pip install --upgrade pip && \
-    pip install tensorflow==2.12.0 tf-models-official==2.12.0 tensorflow_io pyparsing pycairo
+    pip install tensorflow==2.11.0 \
+    tf-models-official==2.11.0 \
+    matplotlib==3.6.1 \
+    protobuf==3.19.6 \
+    tensorflow_io \
+    numpy==1.21.5 \
+    pyparsing \
+    pycairo \
+    Cython \
+    jupyter \
+    Pillow \
+    ray \
+    waymo-open-dataset-tf-2-11-0
+    
 
 WORKDIR /app
 
-COPY requirements.txt .
-RUN python3 -m pip install -r requirements.txt
-RUN python3 -m pip install git+https://github.com/philferriere/cocoapi.git#subdirectory=PythonAPI
+RUN python -m pip install pycocotools==2.0.8 opencv-python==4.5.5.64 
 
 ENV TF_CPP_MIN_LOG_LEVEL=2
 
