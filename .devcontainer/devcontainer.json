@@ -1,0 +1,45 @@
+// For format details, see https://aka.ms/devcontainer.json. For config options, see the
+// README at: https://github.com/devcontainers/templates/tree/main/src/ubuntu
+{
+	"image": "udacity-self-driving-vision-proj",
+	"runArgs": [
+		"--network=host",
+		"--gpus=all",
+		"--shm-size=10.00gb"
+	],
+	"containerEnv": {
+		"PYTHONPATH": "${containerEnv:PYTHONPATH}:${containerWorkspaceFolder}/python",
+		"WORKSPACE_FOLDER": "${containerWorkspaceFolder}"
+	},
+	"mounts": [
+		// Docker in Docker
+		"source=/var/run/docker.sock,target=/var/run/docker.sock,type=bind"
+	],
+	"customizations": {
+		"vscode": { // Add the IDs of extensions you want installed when the container is created.
+			"settings": {
+				"terminal.integrated.defaultProfile.linux": "zsh",
+				"terminal.integrated.defaultProfile.osx": "zsh"
+			},
+			"extensions": [
+				"twxs.cmake",
+				"ms-vscode.cpptools-extension-pack",
+				"llvm-vs-code-extensions.vscode-clangd",
+				"ms-python.python",
+				"ms-vscode.cmake-tools",
+				"ms-vscode.cpptools",
+				"gaborv.flatbuffers",
+				"shardulm94.trailing-spaces",
+				"azurity.pcd-viewer",
+				"cschlosser.doxdocgen",
+				"eriklynd.json-tools",
+				"bbenoist.Doxygen",
+				"ms-python.pylint",
+				"ms-python.black-formatter",
+				"ms-python.isort",
+				"ms-python.flake8",
+				"ms-toolsai.jupyter"
+			]
+		}
+	}
+}

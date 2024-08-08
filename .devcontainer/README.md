@@ -5,20 +5,22 @@
 * NVIDIA GPU with the latest driver installed
 * docker / nvidia-docker
 
-This build has been tested with Nvidia Drivers 460.91.03 and CUDA 11.2 on a Ubutun 20.04 machine.
+This build has been tested with Nvidia Drivers 470.256.02 and CUDA 11.4 on a Ubutun 20.04 machine.
 Please update the base image if you plan on using older versions of CUDA.
 
 ## Build
 Build the image with:
 ```
-docker build -t project-dev -f Dockerfile .
+docker build -t udacity-self-driving-vision-proj -f Dockerfile .
 ```
 
 Create a container with:
 ```
-docker run --gpus all -v <PATH TO LOCAL PROJECT FOLDER>:/app/project/ --network=host -ti project-dev bash
+docker run --gpus all -v <PATH TO LOCAL PROJECT FOLDER>:/app/project/ --network=host -ti udacity-self-driving-vision-proj bash
 ```
 and any other flag you find useful to your system (eg, `--shm-size`).
+
+Alternatively, you can build and start a devcontainer in VS Code using the Remote Explorer extension and the devcontainer.json file.
 
 ## Set up
 
